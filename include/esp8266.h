@@ -30,5 +30,7 @@
 #endif
 
 #include "platform.h"
-#include "espmissingincludes.h"
+//#include "espmissingincludes.h"
+
+int strcasecmp(const char *a, const char *b);
 
