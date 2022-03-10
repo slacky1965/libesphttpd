@@ -769,7 +769,7 @@ void ICACHE_FLASH_ATTR httpdRecvCb(ConnTypePtr rconn, char *remIp, int remPort, 
 				}
 				break; //ignore rest of data, recvhdl has parsed it.
 			} else {
-				httpd_printf("Eh? Got unexpected data from client. %s\n", data);
+//                httpd_printf("Eh? Got unexpected data from client. %s\n", data);
 			}
 		}
 	}
