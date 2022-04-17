@@ -46,7 +46,8 @@ int ICACHE_FLASH_ATTR  __attribute__((weak)) base64_decode(size_t in_len, const 
 
 	for(io=0,ii=0,v=0,rem=0;ii<in_len;ii++) {
 		unsigned char ch;
-		if(isspace((int)in[ii])) continue;
+//        if(isspace((int)in[ii])) continue;
+        if(strchr(" \t\r\n\v\f", (int)in[ii])) continue;
 		if(in[ii]=='=') break; /* stop at = */
 		ch=base64dec_tab[(unsigned int)in[ii]];
 		if(ch==255) break; /* stop at a parse error */
