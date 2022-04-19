@@ -26,6 +26,22 @@
 #define HTTPD_TRANSFER_CHUNKED 1
 #define HTTPD_TRANSFER_NONE 2
 
+typedef enum {
+    HTTPD_500_INTERNAL_SERVER_ERROR = 0,
+    HTTPD_501_METHOD_NOT_IMPLEMENTED,
+    HTTPD_505_VERSION_NOT_SUPPORTED,
+    HTTPD_400_BAD_REQUEST,
+    HTTPD_401_UNAUTHORIZED,
+    HTTPD_403_FORBIDDEN,
+    HTTPD_404_NOT_FOUND,
+    HTTPD_405_METHOD_NOT_ALLOWED,
+    HTTPD_408_REQ_TIMEOUT,
+    HTTPD_411_LENGTH_REQUIRED,
+    HTTPD_414_URI_TOO_LONG,
+    HTTPD_431_REQ_HDR_FIELDS_TOO_LARGE,
+    HTTPD_ERR_CODE_MAX
+} httpd_err_code_t;
+
 typedef struct HttpdPriv HttpdPriv;
 typedef struct HttpdConnData HttpdConnData;
 typedef struct HttpdPostData HttpdPostData;
@@ -88,6 +104,7 @@ void httpdFlushSendBuffer(HttpdConnData *conn);
 void httpdContinue(HttpdConnData *conn);
 void httpdConnSendStart(HttpdConnData *conn);
 void httpdConnSendFinish(HttpdConnData *conn);
+void httpdSendErr(HttpdConnData *conn, httpd_err_code_t error, const char *usr_msg);
 
 //Platform dependent code should call these.
 void httpdSentCb(ConnTypePtr conn, char *remIp, int remPort);
