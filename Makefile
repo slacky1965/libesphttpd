@@ -4,6 +4,9 @@ THISDIR:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 #Include httpd config from lower level, if it exists
 -include ../esphttpdconfig.mk
+-include ../libesphttpd.mk
+
+LIBODIR ?= build
 
 #Default options. If you want to change them, please create ../esphttpdconfig.mk with the options you want in it.
 GZIP_COMPRESSION ?= no
@@ -30,15 +33,15 @@ BUILD_BASE	= build
 
 # Base directory for the compiler. Needs a / at the end; if not set it'll use the tools that are in
 # the PATH.
-XTENSA_TOOLS_ROOT ?= 
+XTENSA_TOOLS_ROOT ?= /opt/xtensa-lx106-elf/bin/
 
 # base directory of the ESP8266 SDK package, absolute
 # Only used for the non-FreeRTOS build
-SDK_BASE	?= /opt/Espressif/ESP8266_SDK
+SDK_BASE	?= /opt/ESP8266_NONOS_SDK
 
 # Base directory of the ESP8266 FreeRTOS SDK package, absolute
 # Only used for the FreeRTOS build
-SDK_PATH	?= /opt/Espressif/ESP8266_RTOS_SDK
+SDK_PATH	?= /opt/ESP8266_RTOS_SDK
 
 
 # name for the target project
@@ -174,6 +177,8 @@ lib/heatshrink/Makefile:
 $(LIB): $(BUILD_DIR) submodules $(OBJ)
 	$(vecho) "AR $@"
 	$(Q) $(AR) cru $@ $(OBJ)
+	$(Q) mkdir -p $(LIBODIR)
+	$(Q) cp $(LIB) $(LIBODIR)/$(LIB)
 
 checkdirs: $(BUILD_DIR)
 
@@ -203,6 +208,7 @@ libwebpages-espfs.a: webpages.espfs
 		webpages.espfs build/webpages.espfs.o.tmp
 	$(Q) $(LD) -nostdlib -Wl,-r build/webpages.espfs.o.tmp -o build/webpages.espfs.o -Wl,-T webpages.espfs.ld
 	$(Q) $(AR) cru $@ build/webpages.espfs.o
+	$(Q) cp libwebpages-espfs.a $(LIBODIR)/libwebpages-espfs.a
 
 espfs/mkespfsimage/mkespfsimage: espfs/mkespfsimage/
 	$(Q) $(MAKE) -C espfs/mkespfsimage USE_HEATSHRINK="$(USE_HEATSHRINK)" GZIP_COMPRESSION="$(GZIP_COMPRESSION)"
